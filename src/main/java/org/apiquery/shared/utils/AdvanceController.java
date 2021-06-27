@@ -1,6 +1,5 @@
 package org.apiquery.shared.utils;
 
-import org.apache.log4j.Logger;
 import org.apiquery.dtos.ResponseStatusDTO;
 import org.apiquery.shared.enums.ResponseStatusCode;
 import org.apiquery.shared.exceptions.ServiceException;
@@ -9,10 +8,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.servlet.ModelAndView;
@@ -25,8 +20,6 @@ import java.util.Map;
 import java.util.UUID;
 
 public class AdvanceController {
-    private static final Logger logger = Logger.getLogger(AdvanceController.class);
-
     protected String getViewFolderLocationBaseOnController() {
 
         return "";

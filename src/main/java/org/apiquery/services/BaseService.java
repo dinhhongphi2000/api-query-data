@@ -11,12 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 
 public interface BaseService<DTO, ENTITY, ID> {
-    List<DTO> findAll();
-    PageData<DTO> findAll(Pageable Pageable, String[] includes);
     PageData<DTO> findAll(Pageable pageable, QueryFilter filter, String[] includes);
-    long count(QueryFilter filter);
     PageData<DTO> findAll(Pageable pageable, QueryAdvanceFilter filter, String[] includes);
-    PageData<DTO> findAll(Pageable pageable, Specification<ENTITY> filter, String[] includes);
-    DTO findById(Object key) throws ServiceException, Exception;
-    DTO findById(Object key, String[] includes) throws ServiceException, Exception;
+    long count(QueryFilter filter);
 }

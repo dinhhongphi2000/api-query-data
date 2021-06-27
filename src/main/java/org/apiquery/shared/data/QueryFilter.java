@@ -55,15 +55,19 @@ public class QueryFilter {
     public Specification createSpecification(Class entity) {
         if (filters.size() <= 0)
             return Specification.where(null);
+        
+        return (root, query, cb) -> {
+            query.distinct(true);
 
-        Specification conditions = Specification.where(specificationParse(filters.get(0), entity));
-        for (int i = 1; i < filters.size(); i++) {
-            if (type.equals("and"))
-                conditions = conditions.and(specificationParse(filters.get(i), entity));
-            else
-                conditions = conditions.or(specificationParse(filters.get(i), entity));
-        }
-        return conditions;
+            Specification conditions = Specification.where(specificationParse(filters.get(0), entity));
+            for (int i = 1; i < filters.size(); i++) {
+                if (type.equals("and"))
+                    conditions = conditions.and(specificationParse(filters.get(i), entity));
+                else
+                    conditions = conditions.or(specificationParse(filters.get(i), entity));
+            }
+            return conditions.toPredicate(root, query, cb);
+        };
     }
 
     public String getValue(String field) {

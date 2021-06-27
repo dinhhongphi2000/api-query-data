@@ -6,8 +6,6 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
 import org.apiquery.dtos.*;
 import org.apiquery.repositories.*;
 import org.apiquery.services.*;
@@ -25,7 +23,6 @@ import org.springframework.data.jpa.domain.Specification;
 
 public class BaseServiceImpl<DTO, ENTITY, ID> implements BaseService<DTO, ENTITY, ID> {
 	BaseRepository<ENTITY, ID> baseRepository;
-	private static final Logger logger = LogManager.getLogger(BaseServiceImpl.class);
 
 	private ApplicationContext context;
 
@@ -41,42 +38,6 @@ public class BaseServiceImpl<DTO, ENTITY, ID> implements BaseService<DTO, ENTITY
 		this.context = context;
 	}
 
-	@Override
-	public List<DTO> findAll() {
-		List<ENTITY> entities = baseRepository.findAll();
-		if (entities == null)
-			return null;
-
-		// convert list
-		try {
-			List<DTO> dtos = this.convertEntityToDtoList(entities);
-			return dtos;
-		} catch (Exception ex) {
-			return null;
-		}
-	}
-
-	@Override
-	public PageData<DTO> findAll(Pageable pageable, String[] inclues) {
-		if (pageable == null)
-			pageable = PageRequest.of(0, 10);
-
-		Page<ENTITY> entitiesPage = baseRepository.findAll(pageable);
-		PageData<DTO> pageData = new PageData<DTO>(entitiesPage);
-		List<DTO> dtos = new ArrayList<>();
-		try {
-			for (ENTITY entity : entitiesPage.getContent()) {
-				DTO dto = EntityToDTO.convertTo(getDTOClazz(), entity, inclues);
-				dtos.add(dto);
-			}
-			pageData.setData(dtos);
-			return pageData;
-		} catch (Exception ex) {
-			logger.error("Không thể convert list. Message: " + ex.getMessage(), ex);
-			return null;
-		}
-	}
-
 	protected List<DTO> convertEntityToDtoList(List<ENTITY> entities) throws Exception {
 		if (entities == null)
 			return null;
@@ -87,11 +48,6 @@ public class BaseServiceImpl<DTO, ENTITY, ID> implements BaseService<DTO, ENTITY
 			dtos.add(dto);
 		}
 		return dtos;
-	}
-
-	@Override
-	public DTO findById(Object key) throws ServiceException, Exception {
-		return findById(key, null);
 	}
 
 	@SuppressWarnings({ "unchecked" })
@@ -128,18 +84,6 @@ public class BaseServiceImpl<DTO, ENTITY, ID> implements BaseService<DTO, ENTITY
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public DTO findById(Object key, String[] includes) throws ServiceException, Exception {
-		ENTITY entity = baseRepository.getOneById((ID) key);
-
-		try {
-			return EntityToDTO.convertTo(getDTOClazz(), entity, includes);
-		} catch (Exception ex) {
-			return null;
-		}
-	}
-
-	@Override
-	@SuppressWarnings("unchecked")
 	public PageData<DTO> findAll(Pageable pageable, QueryFilter filter, String[] includes) {
 		if (pageable == null)
 			pageable = PageRequest.of(0, 10);
@@ -161,30 +105,6 @@ public class BaseServiceImpl<DTO, ENTITY, ID> implements BaseService<DTO, ENTITY
 			pageData.setData(dtos);
 			return pageData;
 		} catch (Exception ex) {
-			logger.error("Không thể convert list. Message: " + ex.getMessage(), ex);
-			return null;
-		}
-	}
-
-	@Override
-	public PageData<DTO> findAll(Pageable pageable, Specification<ENTITY> filter, String[] includes) {
-		if (pageable == null)
-			pageable = PageRequest.of(0, 10);
-
-		filter = filter.and((root, query, cb) -> cb.equal(root.get("isDeleted"), false));
-
-		Page<ENTITY> entitiesPage = baseRepository.findAll(filter, pageable);
-		PageData<DTO> pageData = new PageData<DTO>(entitiesPage);
-		List<DTO> dtos = new ArrayList<>();
-		try {
-			for (ENTITY entity : entitiesPage.getContent()) {
-				DTO dto = EntityToDTO.convertTo(getDTOClazz(), entity, includes);
-				dtos.add(dto);
-			}
-			pageData.setData(dtos);
-			return pageData;
-		} catch (Exception ex) {
-			logger.error("Không thể convert list. Message: " + ex.getMessage(), ex);
 			return null;
 		}
 	}
@@ -212,7 +132,6 @@ public class BaseServiceImpl<DTO, ENTITY, ID> implements BaseService<DTO, ENTITY
 			pageData.setData(dtos);
 			return pageData;
 		} catch (Exception ex) {
-			logger.error("Không thể convert list. Message: " + ex.getMessage(), ex);
 			return null;
 		}
 	}

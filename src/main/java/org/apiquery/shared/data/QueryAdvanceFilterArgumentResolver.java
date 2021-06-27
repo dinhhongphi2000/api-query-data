@@ -10,8 +10,6 @@ import javax.servlet.http.HttpServletRequest;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.apiquery.shared.utils.QueryFilterDeserialize;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;
@@ -20,8 +18,6 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
 public class QueryAdvanceFilterArgumentResolver implements HandlerMethodArgumentResolver {
-    Logger Logger = LogManager.getLogger(QueryFilterArgumentResolver.class);
-
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
         return parameter.getParameterType().equals(QueryAdvanceFilter.class);

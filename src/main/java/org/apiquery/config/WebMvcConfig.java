@@ -37,7 +37,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
         pageableResolver.setOneIndexedParameters(true);
         pageableResolver.setFallbackPageable(PageRequest.of(0, 10));
         resolvers.add(pageableResolver);
-
     }
 
     @Override

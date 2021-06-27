@@ -6,8 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apiquery.dtos.ResponseStatusDTO;
-import org.apiquery.shared.data.QueryFilter;
-import org.apiquery.shared.data.QueryInclude;
+import org.apiquery.shared.data.*;
 import org.apiquery.shared.utils.AdvanceController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -31,6 +30,16 @@ public class UserApiController extends AdvanceController {
     @GetMapping()
     public ResponseEntity<ResponseStatusDTO> getList(Pageable pageable, QueryFilter filter, QueryInclude includes,
             HttpServletRequest httpRequest) {
+        try {
+            return success(userService.findAll(pageable, filter, includes.getFields()));
+        } catch (Exception ex) {
+            return fail(ex, httpRequest);
+        }
+    }
+
+    @PostMapping("advance-search")
+    public ResponseEntity<ResponseStatusDTO> advanceSearch(Pageable pageable, QueryAdvanceFilter filter,
+            QueryInclude includes, HttpServletRequest httpRequest) {
         try {
             return success(userService.findAll(pageable, filter, includes.getFields()));
         } catch (Exception ex) {

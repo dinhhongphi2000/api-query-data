@@ -3,7 +3,6 @@ package org.apiquery.services.implement;
 import java.lang.reflect.InvocationTargetException;
 import java.util.UUID;
 
-import org.apache.commons.beanutils.BeanUtils;
 import org.apiquery.dtos.*;
 import org.apiquery.entities.*;
 import org.apiquery.services.*;
@@ -14,10 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserServiceImpl extends BaseServiceImpl<UserDTO, UserEntity, UUID> implements UserService {
+public class UserServiceImpl extends BaseServiceImpl<UserDTO, UserEntity, Integer> implements UserService {
     
     private UserRepository userRepo;
-    // private AgencyRepository agencyRepo;
     
     @Autowired
     public UserServiceImpl(UserRepository baseRepo) {

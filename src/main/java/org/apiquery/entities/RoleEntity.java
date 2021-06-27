@@ -5,26 +5,29 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.ManyToMany;
+import javax.persistence.JoinTable;
+import javax.persistence.JoinColumn;
 import java.util.Set;
 
-@Table(name = "User")
+@Table(name = "Role")
 @Entity
-public class UserEntity {
+public class RoleEntity {
     @Column(name = "Id")
     @Id
     private int id;
     @Column(name = "Name")
     private String name;
 
-    @ManyToMany(mappedBy = "users")
-    private Set<RoleEntity> roles;
+    @ManyToMany
+    @JoinTable(name = "UserRole", joinColumns = @JoinColumn(name = "RoleId"), inverseJoinColumns = @JoinColumn(name = "UserId"))
+    private Set<UserEntity> users;
 
-    public Set<RoleEntity> getRoles() {
-        return this.roles;
+    public Set<UserEntity> getUsers() {
+        return this.users;
     }
 
-    public void setRoles(Set<RoleEntity> roles) {
-        this.roles = roles;
+    public void setUsers(Set<UserEntity> users) {
+        this.users = users;
     }
 
     public int getId() {

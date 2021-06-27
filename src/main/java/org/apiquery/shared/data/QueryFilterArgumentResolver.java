@@ -7,8 +7,6 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
@@ -16,8 +14,6 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
 public class QueryFilterArgumentResolver implements HandlerMethodArgumentResolver {
-    Logger Logger = LogManager.getLogger(QueryFilterArgumentResolver.class);
-
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
         return parameter.getParameterType().equals(QueryFilter.class);
@@ -43,7 +39,6 @@ public class QueryFilterArgumentResolver implements HandlerMethodArgumentResolve
             Object filterObject = saveFieldStringToObject(fieldsString, type, filterOptions);
             return filterObject;
         } catch (Exception ex) {
-            Logger.warn("Convert query filter parameter error. " + ex.getMessage(), ex);
             return null;
         }
     }
